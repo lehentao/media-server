@@ -1,0 +1,46 @@
+version: '2'
+services:
+  plex:
+    container_name: plex
+    image: plexinc/pms-docker
+    restart: unless-stopped
+    environment:
+      - TZ=America/La_Paz
+      - PLEX_CLAIM=claim-jnfeFG3f2iid7bUmxeso
+    network_mode: host
+    volumes:
+      - /home/gsrichiardi/Fuentes/movies/media-server/plex/config:/config
+      - /home/gsrichiardi/Fuentes/movies/media-server/plex/transcode:/transcode
+      - /home/gsrichiardi/Fuentes/movies/media-server/plex/data:/data
+  flexget:
+    container_name: flexget
+    image: cpoppema/docker-flexget
+    restart: unless-stopped
+    links:
+      - transmission
+    ports:
+      - "5050:5050"
+    environment:
+      - PGID=1000 
+      - PUID=1000 
+      - WEB_PASSWD=yourhorriblesecret
+      - TORRENT_PLUGIN=transmission 
+      - FLEXGET_LOG_LEVEL=debug 
+    volumes:
+      - /home/gsrichiardi/Fuentes/movies/media-server/flexget/config:/config
+      - /home/gsrichiardi/Fuentes/movies/media-server/plex/data:/downloads
+  transmission:
+    container_name: transmission
+    image: linuxserver/transmission
+    restart: unless-stopped
+    ports:
+      - 9091:9091 
+      - 51413:51413 
+    environment:
+      - PGID=1000 
+      - PUID=1000
+      - TZ=America/La_Paz
+    volumes:
+      - /home/gsrichiardi/Fuentes/movies/media-server/transmission/config:/config
+      - /home/gsrichiardi/Fuentes/movies/media-server/transmission/downloads:/downloads
+      - /home/gsrichiardi/Fuentes/movies/media-server/flexget/downloads:/watch
