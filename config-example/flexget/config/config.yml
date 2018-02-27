@@ -3,14 +3,13 @@ tasks:
   # called via cron every 30 minutes. 
   download-showrss:
     rss:
-      url: 'http://showrss.info/user/43247.rss?magnets=true&namespaces=true&name=null&quality=null&re=null'
+      url: '<url_rss>'
     all_series: yes
-    transmission: yes
-    clean_transmission:
-      host: localhost
+    transmission: 
+      host: outside
       port: 9091
-      delete_files: yes
-      transmission_seed_limits: yes
+      username: user
+      password: pass
   # sorting task called on torrent done
   sort-shows:
     filesystem:
@@ -22,39 +21,9 @@ tasks:
     regexp:
       reject:
         - sample
-    series:
-      settings:
-        group 1:
-          parse_only: yes
-      group 1: 
-        - Scandal (2012):
-            alternate_name: Scandal US
-        - Once Upon a Time (2011):
-            alternate_name: Once Upon a Time
-        - House of Cards (US):
-            alternate_name: House of Cards 2013
-        - Last Man Standing (2011):
-            alternate_name: Last Man Standing US
-        - South Park
-        - Modern Family
-        - The Middle
-        - Game of Thrones
-        - Homeland
-        - Orange Is the New Black
-        - The Fall
-        - Better Call Saul
-        - Luther
-        - Silicon Valley
-        - Community
-        - True Detective
-        - Ballers
-        - Narcos
-        - The X Files
-        - Making a Murderer
-        - American Crime Story
     thetvdb_lookup: yes
     copy:
-      to: /downloads/{{ tvdb_series_name }}/
+      to: /data/{{ tvdb_series_name }}/
     kodi_library:
       action: scan
       category: video
