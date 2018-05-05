@@ -1,0 +1,10 @@
+iptables -I INPUT 5 -p tcp -m tcp --dport 32400 -j ACCEPT
+iptables -I INPUT 5 -p udp -m udp --dport 1900 -j ACCEPT
+iptables -I INPUT 5 -p tcp -m tcp --dport 3005 -j ACCEPT
+iptables -I INPUT 5 -p udp -m udp --dport 5353 -j ACCEPT
+iptables -I INPUT 5 -p tcp -m tcp --dport 8324 -j ACCEPT
+iptables -I INPUT 5 -p udp -m udp --dport 32410 -j ACCEPT
+iptables -I INPUT 5 -p udp -m udp --dport 32412 -j ACCEPT
+iptables -I INPUT 5 -p udp -m udp --dport 32413 -j ACCEPT
+iptables -I INPUT 5 -p udp -m udp --dport 32414 -j ACCEPT
+iptables -I INPUT 5 -p tcp -m tcp --dport 32469 -j ACCEPT

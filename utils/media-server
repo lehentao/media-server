@@ -1,0 +1,14 @@
+# /bin/bash
+function print_help(){
+  echo "media-server ACCION [SERVICE]"
+  echo "ACCION  : start|stop|restart|ps"
+  echo "SERVICE : plex|flexget|transmission"
+}
+
+if [ X$1 != Xstart ] && [ X$1 != Xstop ] && [ X$1 != Xrestart ] && [ X$1 != Xps ]
+then
+  print_help
+else
+  docker-compose -f /path/of/media-server/docker-compose.yml $1 $2
+fi
+

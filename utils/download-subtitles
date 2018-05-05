@@ -1,0 +1,15 @@
+# /bin/bash
+function print_help(){
+  echo "download-subtitles [PATH]"
+  echo "PATH  : path/of/video/content"
+}
+
+if [ X$1 == X ]
+then
+  PATH=$(pwd)
+else
+  PATH=$1
+fi
+echo $PATH
+eval "/usr/bin/docker run --rm --name subliminal -v subliminal_cache:/usr/src/cache -v \"${PATH}\":/tvshows -it diaoulael/subliminal download -l es /tvshows/"
+
