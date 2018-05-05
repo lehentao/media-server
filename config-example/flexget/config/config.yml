@@ -1,39 +1,58 @@
 tasks:
-  # downloading task and remove finished torrents
-  # called via cron every 30 minutes. 
-  download-showrss:
-    rss:
-      url: '<url_rss>'
+  shewrss.info:
+    rss: /your/showrss/info
     all_series: yes
-    transmission: 
+    accept_all: yes
+    template: series
+
+
+  sort-series:
+    filesystem:
+      path: /downloads/series
+      regexp: '.*\.(avi|mkv|mpg|mp4|std|sub|srt|m4v)$'
+      recursive: yes
+    seen: local
+    metainfo_series: yes
+    accept_all: yes
+    require_field: series_name
+    thetvdb_lookup: yes
+    all_series:
+      parse_only: yes
+    move:
+      to: /data/series/{{series_name}}/SEASON {{series_season|pad(2)}}
+  move_movies:
+    imdb_lookup: yes
+    accept_all: yes
+    filesystem:
+      path: /downloads/incoming
+      regexp: '.*\.(avi|mkv|mpg|mp4|std|sub|srt|m4v)$'      
+      recursive: yes
+    move:
+      to: "/data/peliculas/{{ movie_name }}/"
+      rename: '{{ movie_name }} - {{movie_year}}'
+      clean_source: 100
+      along:
+        extensions:
+          - sub
+          - srt
+        subdirs:
+          - Subs
+    regexp:
+      reject: 
+        - sample
+        - alt-torrent.com
+  clean_torrents:
+    clean_transmission:
       host: outside
       port: 9091
-      username: user
-      password: pass
-  # sorting task called on torrent done
-  sort-shows:
-    filesystem:
-      path: /downloads/
-      regexp: '.*\.(avi|mkv|mp4)$'
-      recursive: yes
-    accept_all: yes
-    disable: seen
-    regexp:
-      reject:
-        - sample
-    thetvdb_lookup: yes
-    copy:
-      to: /data/{{ tvdb_series_name }}/
-    kodi_library:
-      action: scan
-      category: video
-      url: http://localhost
-      username: kodi
-      password: secret
-      port: 8080
-
+      username: lenntorrent
+      password: xal19$$
+      finished_for: 2 hours
+    disable: details
 schedules:
-  # Run TV lookup task(s) every 30 minutes
-  - tasks: '*'
+  - tasks: [shewrss.info,sort-series,move_movies]
     interval:
-      minutes: 1
+      minutes: 15
+  - tasks: [clean_torrents]
+    interval:
+      hours: 2

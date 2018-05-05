@@ -3,17 +3,21 @@ services:
   plex:
     container_name: plex
     image: plexinc/pms-docker
+    hostname: plex
     restart: unless-stopped
+    network_mode: host
     environment:
+      - PGID=994
+      - PUID=994
       - HOSTNAME=plex
-      - TZ=<time-zone>
-      - PLEX_CLAIM=<claim>
-    networks:
-      - default
+      - TZ=America/La_Paz
+      - PLEX_CLAIM=<CLAIM>
+      - ADVERTISE_IP=http://192.168.1.100:32400/
     volumes:
-      - ~/Fuentes/movies/media-server/config/plex/config:/config
-      - ~/Fuentes/movies/media-server/config/plex/transcode:/transcode
-      - ~/Fuentes/movies/media-server/data:/data
+      - /media-server/config/plex/config:/config
+      - /media-server/config/plex/transcode:/transcode
+      - /media:/data
+      - /run
   transmission:
     container_name: transmission
     image: linuxserver/transmission
@@ -25,13 +29,13 @@ services:
       - 51413:51413 
     environment:
       - HOSTNAME=transmission
-      - PGID=1000 
-      - PUID=1000
+      - PGID=0
+      - PUID=0
       - TZ=America/La_Paz
     volumes:
-      - ~/Fuentes/movies/media-server/config/transmission/config:/config
-      - ~/Fuentes/movies/media-server/downloads:/downloads
-      - ~/Fuentes/movies/media-server/watch:/watch
+      - /media-server/config/transmission/config:/config
+      - /downloads:/downloads
+      - /watch:/watch
   flexget:
     container_name: flexget
     image: cpoppema/docker-flexget
@@ -39,19 +43,20 @@ services:
     networks:
       - default
     extra_hosts:
-      - "outside:<local-ip>"
-    links:
-      - transmission
+      - "outside:192.168.1.100"
+    #links:
+    #  - transmission
     ports:
       - "5050:5050"
     environment:
       - HOSTNAME=flexget
-      - PGID=1000 
-      - PUID=1000 
+      - PGID=0 
+      - PUID=0
       - WEB_PASSWD=yourhorriblesecret
       - TORRENT_PLUGIN=transmission 
       - FLEXGET_LOG_LEVEL=debug 
     volumes:
-      - ~/Fuentes/movies/media-server/config/flexget/config:/config
-      - ~/Fuentes/movies/media-server/downloads:/downloads
-      - ~/Fuentes/movies/media-server/data:/data
+      - /media-server/config/flexget/config:/config
+      - /downloads:/downloads
+      - /media:/data
+

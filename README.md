@@ -10,3 +10,9 @@
 - `<path/to/media>` This is provided as examples for providing media into the container.  The exact structure of how the media is organized and presented inside the container is a matter of user preference.  You can use as many or as few of these parameters as required to provide your media to the container.
 - `<time/zone>` Set the timezone inside the container.  For example: `Europe/London`.  The complete list can be found here: [https://en.wikipedia.org/wiki/List_of_tz_database_time_zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
 - `<plex_claim>` The claim token for the server to obtain a real server token.  If not provided, server will not be automatically logged in. If server is already logged in, this parameter is ignored.  You can obtain a claim token to login your server to your plex account by visiting [https://www.plex.tv/claim](https://www.plex.tv/claim)
+## Utils
+For install utility for start, stop and restart media server, edit file ./utils/media-server and configure path /path/to/media-server/docker-compose.yml and excecute next commands:
+- mkdir -p $HOME/bin
+- cp utils/media-server $HOME/bin 
+- chmod +x /$HOME/bin/media-server
+then you can run utility whit command "media-server help"

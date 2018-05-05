@@ -1,6 +1,2 @@
 /.idea
-/flexget
-/plex
-/transmission
-
-
+/config/
